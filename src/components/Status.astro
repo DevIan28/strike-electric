@@ -1,0 +1,24 @@
+---
+import { copy } from '../i18n/copy';
+import type { Lang } from '../data/site';
+
+interface Props {
+  lang: Lang;
+  class?: string;
+}
+
+const { lang, class: className } = Astro.props;
+const s = copy[lang].status;
+---
+
+<!-- Filled in on the client from New York time; hidden until then so it never shows a wrong state -->
+<p
+  class:list={['status', className]}
+  data-status
+  data-lang={lang}
+  data-i18n={JSON.stringify(s)}
+  hidden
+>
+  <span class="status__dot" aria-hidden="true"></span>
+  <span class="status__label"></span>
+</p>

@@ -1,0 +1,384 @@
+---
+import Icon from './Icon.astro';
+import { copy } from '../i18n/copy';
+import { site, type Lang } from '../data/site';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = copy[lang];
+const f = t.footer;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const otherHome = lang === 'es' ? `${base}/` : `${base}/es/`;
+
+const fmt = (h: number) =>
+  lang === 'es'
+    ? `${h}:00`
+    : `${h % 12 === 0 ? 12 : h % 12} ${h < 12 ? 'AM' : 'PM'}`;
+
+// Group consecutive days with identical hours: Mon–Fri 7 AM – 7 PM
+const rows: { days: string; time: string }[] = [];
+for (let d = 1; d <= 7; d++) {
+  const day = d % 7;
+  const h = site.hours[day];
+  const time = h ? `${fmt(h[0])} – ${fmt(h[1])}` : f.closedDay;
+  const prev = rows.at(-1);
+  if (prev && prev.time === time) {
+    prev.days = `${prev.days.split('–')[0]}–${f.days[day]}`;
+  } else {
+    rows.push({ days: f.days[day], time });
+  }
+}
+
+const links = [
+  { href: '#services', label: t.nav.services },
+  { href: '#process', label: t.nav.process },
+  { href: '#about', label: t.nav.about },
+  { href: '#estimate', label: t.nav.estimate },
+];
+---
+
+<footer class="foot" data-foot>
+  <div class="wrap foot__top">
+    <a class="main" href={site.phone.href} data-main-switch aria-label={`${t.nav.call} ${site.phone.display}`}>
+      <span class="main__box" aria-hidden="true">
+        <span class="main__mark main__mark--on">ON</span>
+        <span class="main__handle"></span>
+        <span class="main__mark main__mark--off">OFF</span>
+      </span>
+      <span class="main__text">
+        <span class="main__label" data-off>{f.switchLabel}</span>
+        <span class="main__label" data-on>{f.switchOn}</span>
+        <strong>{site.phone.display}</strong>
+      </span>
+    </a>
+
+    <div class="directory" aria-labelledby="dir-title">
+      <h2 class="sr-only" id="dir-title">{f.directory}</h2>
+      <dl>
+        <div>
+          <dt><Icon name="phone" />{f.phone}</dt>
+          <dd><a href={site.phone.href}>{site.phone.display}</a></dd>
+        </div>
+        <div>
+          <dt><Icon name="mail" />{f.email}</dt>
+          <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+        </div>
+        <div>
+          <dt><Icon name="clock" />{f.hours}</dt>
+          <dd>
+            {
+              rows.map((r) => (
+                <span class="hours">
+                  <span>{r.days}</span>
+                  <span>{r.time}</span>
+                </span>
+              ))
+            }
+          </dd>
+        </div>
+        <div>
+          <dt><Icon name="pin" />{f.area}</dt>
+          <dd>{site.areas.join(', ')}</dd>
+        </div>
+      </dl>
+    </div>
+
+    <nav class="foot__nav" aria-label="Footer">
+      <ul role="list">
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+        <li>
+          <a href={otherHome} hreflang={lang === 'es' ? 'en' : 'es'} lang={lang === 'es' ? 'en' : 'es'}>{t.nav.switchLang}</a>
+        </li>
+      </ul>
+      <a class="totop" href="#top">
+        <Icon name="up" />
+        {f.top}
+      </a>
+    </nav>
+  </div>
+
+  <div class="word" data-word aria-hidden="true">
+    <span>Strike Electric</span>
+  </div>
+
+  <div class="wrap foot__base">
+    <p>© {new Date().getFullYear()} {site.legalName}. {f.rights}</p>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    position: relative;
+    overflow: hidden;
+    padding-top: clamp(4rem, 8vw, 7rem);
+    background:
+      radial-gradient(60rem 30rem at 50% 120%, rgb(10 166 212 / 0.18), transparent 70%),
+      #040c17;
+    border-top: 1px solid rgb(147 164 184 / 0.12);
+  }
+
+  .foot__top {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1.6fr) minmax(0, 0.8fr);
+    gap: clamp(2rem, 5vw, 5rem);
+    align-items: start;
+  }
+
+  /* Main switch */
+  .main {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    color: var(--chrome);
+    text-decoration: none;
+  }
+
+  .main__box {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    width: 4.75rem;
+    height: 9.5rem;
+    padding: 0.6rem 0;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #13304f, #0a1d33);
+    box-shadow:
+      0 0 0 1px rgb(147 164 184 / 0.25) inset,
+      0 1px 0 rgb(255 255 255 / 0.1) inset,
+      0 20px 40px -20px #000;
+  }
+
+  .main__mark {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--steel);
+  }
+
+  .main__mark--off {
+    align-self: end;
+  }
+
+  .main__handle {
+    position: absolute;
+    left: 50%;
+    top: 58%;
+    width: 2.6rem;
+    height: 3rem;
+    border-radius: 0.6rem;
+    transform: translate(-50%, 0);
+    background: linear-gradient(180deg, #9fb1c4, #51647a 60%, #3a4b5f);
+    box-shadow:
+      0 6px 0 #1c2b3c,
+      0 10px 18px rgb(0 0 0 / 0.6);
+    transition:
+      top 0.45s var(--ease-snap),
+      background 0.3s,
+      box-shadow 0.3s;
+  }
+
+  .main:hover .main__handle,
+  .main:focus-visible .main__handle {
+    top: 52%;
+  }
+
+  :global(.foot.is-live) .main__handle {
+    top: 18%;
+    background: linear-gradient(180deg, #e8fcff, var(--arc) 60%, var(--arc-deep));
+    box-shadow:
+      0 -6px 0 #077a9c,
+      0 0 30px rgb(63 224 255 / 0.9);
+  }
+
+  :global(.foot.is-live) .main__mark--on {
+    color: var(--arc);
+  }
+
+  .main__text {
+    display: grid;
+  }
+
+  .main__label {
+    color: var(--steel);
+    font-size: 0.95rem;
+  }
+
+  [data-on],
+  :global(.foot.is-live) [data-off] {
+    display: none;
+  }
+
+  :global(.foot.is-live) [data-on] {
+    display: inline;
+    color: var(--arc);
+  }
+
+  .main__text strong {
+    font-size: var(--step-2);
+    font-weight: 800;
+    font-stretch: 66%;
+    line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  /* Directory card: like the label on a panel door */
+  .directory dl {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    margin: 0;
+    border-radius: var(--radius-m);
+    overflow: hidden;
+    background: rgb(147 164 184 / 0.14);
+    box-shadow: 0 0 0 1px rgb(147 164 184 / 0.14);
+  }
+
+  .directory dl > div {
+    padding: 1.1rem 1.25rem;
+    background: #06111f;
+  }
+
+  .directory dt {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--steel);
+    font-size: 0.88rem;
+  }
+
+  .directory dt :global(svg) {
+    width: 1rem;
+    color: var(--arc);
+  }
+
+  .directory dd {
+    margin: 0.35rem 0 0;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  .directory a {
+    text-decoration: none;
+  }
+
+  .directory a:hover {
+    color: var(--arc);
+  }
+
+  .hours {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .hours span:first-child {
+    color: var(--steel);
+  }
+
+  .foot__nav ul {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .foot__nav a {
+    display: inline-block;
+    padding: 0.35rem 0;
+    color: var(--steel);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .foot__nav a:hover {
+    color: var(--chrome);
+  }
+
+  .totop {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 1.25rem;
+  }
+
+  .totop :global(svg) {
+    width: 1rem;
+  }
+
+  /* The giant wordmark, lit by the pointer */
+  .word {
+    --mx: 50%;
+    --my: 50%;
+    --glow: 0;
+    margin-top: clamp(3rem, 7vw, 6rem);
+    text-align: center;
+    user-select: none;
+    transition: --glow 0.5s;
+  }
+
+  .word span {
+    display: block;
+    font-size: min(15.2vw, 13.5rem);
+    font-weight: 800;
+    font-stretch: 62%;
+    line-height: 0.9;
+    padding-bottom: 0.06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    background:
+      radial-gradient(
+        circle 18rem at var(--mx) var(--my),
+        rgb(255 255 255 / calc(var(--glow) * 1)),
+        rgb(63 224 255 / calc(var(--glow) * 0.9)) 30%,
+        transparent 70%
+      ),
+      linear-gradient(180deg, #34597f 0%, #1a3653 55%, #0c1d31 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition: filter 0.5s;
+  }
+
+  :global(.foot.is-live) .word span {
+    background: linear-gradient(180deg, #ffffff, var(--arc) 45%, var(--arc-deep));
+    -webkit-background-clip: text;
+    background-clip: text;
+    filter: drop-shadow(0 0 30px rgb(63 224 255 / 0.6));
+  }
+
+  .foot__base {
+    position: relative;
+    padding-block: 1.5rem;
+    border-top: 1px solid rgb(147 164 184 / 0.12);
+    color: var(--steel);
+    font-size: var(--step--1);
+  }
+
+  @media (max-width: 1000px) {
+    .foot__top {
+      grid-template-columns: auto 1fr;
+    }
+
+    .foot__nav {
+      grid-column: 1 / -1;
+    }
+
+    .foot__nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem 1.5rem;
+    }
+  }
+
+  @media (max-width: 720px) {
+    .foot__top {
+      grid-template-columns: 1fr;
+    }
+
+    .directory dl {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

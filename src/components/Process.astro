@@ -1,0 +1,158 @@
+---
+import { copy } from '../i18n/copy';
+import type { Lang } from '../data/site';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = copy[lang].process;
+const last = t.steps.length - 1;
+---
+
+<section class="section on-paper process" id="process" aria-labelledby="process-title" data-process>
+  <div class="wrap">
+    <h2 class="display h2" id="process-title">{t.title}</h2>
+
+    <ol role="list" class="steps" style={`--n: ${last}`}>
+      {
+        t.steps.map((s, i) => (
+          <li class="step" style={`--i: ${i}`}>
+            {i < last && (
+              <span class="seg" aria-hidden="true">
+                <span class="seg__current" />
+              </span>
+            )}
+            <span class="node" aria-hidden="true">
+              {i + 1}
+            </span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .process {
+    --p: 0;
+  }
+
+  .steps {
+    --gap: 2rem;
+    --node: 3.2rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--gap);
+    margin-top: clamp(2.5rem, 5vw, 4.5rem);
+  }
+
+  .step {
+    /* 0 → 1 as the current reaches this step, and fills the segment after it */
+    --lit: clamp(0, (var(--p) * var(--n) - var(--i)) * 20 + 1, 1);
+    --fill: clamp(0, var(--p) * var(--n) - var(--i), 1);
+    position: relative;
+  }
+
+  /* Copper wire from this node to the next */
+  .seg {
+    position: absolute;
+    top: calc(var(--node) / 2 - 2px);
+    left: calc(var(--node) / 2);
+    width: calc(100% + var(--gap));
+    height: 4px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, #e9a06a, #a85a26);
+  }
+
+  .seg__current {
+    position: absolute;
+    inset: -1px auto -1px 0;
+    width: calc(var(--fill) * 100%);
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--arc-deep), var(--arc) 85%, #fff);
+    box-shadow: 0 0 12px var(--arc);
+  }
+
+  .node {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    width: var(--node);
+    height: var(--node);
+    border-radius: 50%;
+    background: var(--paper);
+    box-shadow: 0 0 0 4px #c47035 inset;
+    color: color-mix(in srgb, #fff calc(var(--lit) * 100%), var(--ink));
+    font-weight: 800;
+    font-stretch: 70%;
+    font-size: 1.35rem;
+  }
+
+  .node::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 50%;
+    background: var(--ink);
+    box-shadow:
+      0 0 0 4px var(--arc) inset,
+      0 0 24px rgb(63 224 255 / 0.8);
+    opacity: var(--lit);
+  }
+
+  .step h3 {
+    margin-top: 1.4rem;
+    font-size: var(--step-1);
+    font-weight: 750;
+    font-stretch: 78%;
+    line-height: 1.15;
+  }
+
+  .step p {
+    margin-top: 0.45rem;
+    color: var(--ink-soft);
+    max-width: 28ch;
+  }
+
+  @media (max-width: 820px) {
+    .steps {
+      --gap: 2.25rem;
+      grid-template-columns: 1fr;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: var(--node) 1fr;
+      column-gap: 1.25rem;
+    }
+
+    .node {
+      grid-row: span 2;
+    }
+
+    .step h3 {
+      margin-top: 0.55rem;
+    }
+
+    .seg {
+      top: calc(var(--node) / 2);
+      left: calc(var(--node) / 2 - 2px);
+      width: 4px;
+      height: calc(100% + var(--gap));
+      background: linear-gradient(90deg, #e9a06a, #a85a26);
+    }
+
+    .seg__current {
+      inset: 0 -1px auto -1px;
+      width: auto;
+      height: calc(var(--fill) * 100%);
+      background: linear-gradient(180deg, var(--arc-deep), var(--arc) 85%, #fff);
+    }
+  }
+</style>

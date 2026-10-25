@@ -1,0 +1,444 @@
+---
+import Icon from './Icon.astro';
+import { copy } from '../i18n/copy';
+import { site, type Lang } from '../data/site';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = copy[lang].nav;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const home = lang === 'es' ? `${base}/es/` : `${base}/`;
+const otherHome = lang === 'es' ? `${base}/` : `${base}/es/`;
+
+const links = [
+  { id: 'services', label: t.services },
+  { id: 'process', label: t.process },
+  { id: 'about', label: t.about },
+  { id: 'estimate', label: t.estimate },
+];
+---
+
+<header class="bar" data-bar>
+  <div class="bar__inner">
+    <a class="brand" href={home} aria-label={site.name}>
+      <img src={`${base}/brand/emblem-sm.webp`} alt="" width="230" height="229" />
+      <span class="brand__word chrome">Strike<br />Electric</span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <ul role="list" data-nav>
+        {
+          links.map((l) => (
+            <li>
+              <a href={`#${l.id}`} data-section={l.id}>
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <span class="nav__current" aria-hidden="true"></span>
+    </nav>
+
+    <div class="bar__end">
+      <a class="lang" href={otherHome} hreflang={lang === 'es' ? 'en' : 'es'} lang={lang === 'es' ? 'en' : 'es'}>
+        <Icon name="globe" />
+        <span class="lang__long">{t.switchLang}</span>
+        <span class="lang__short" aria-hidden="true">{t.switchLangShort}</span>
+      </a>
+      <a class="btn btn--charge bar__call" href={site.phone.href}>
+        <Icon name="phone" />
+        {site.phone.display}
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Thumb-reach dock for phones and small tablets -->
+<nav class="dock" aria-label={t.menu}>
+  <a class="dock__call" href={site.phone.href}>
+    <Icon name="phone" />
+    <span>{t.call}</span>
+  </a>
+  <a class="dock__item" href="#estimate">
+    <Icon name="doc" />
+    <span>{t.estimate}</span>
+  </a>
+  <button class="dock__item" type="button" data-menu-open aria-haspopup="dialog">
+    <Icon name="menu" />
+    <span>{t.menu}</span>
+  </button>
+</nav>
+
+<dialog class="panel" data-menu aria-label={t.menu}>
+  <div class="panel__door">
+    <div class="panel__head">
+      <span class="panel__title">{t.menu}</span>
+      <button class="panel__close" type="button" data-menu-close>
+        <Icon name="close" />
+        <span class="sr-only">{t.close}</span>
+      </button>
+    </div>
+    <ul role="list" class="breakers">
+      {
+        links.map((l) => (
+          <li>
+            <a href={`#${l.id}`} data-menu-link data-section={l.id}>
+              <span class="breaker" aria-hidden="true">
+                <span class="breaker__handle" />
+              </span>
+              <span class="breakers__label">{l.label}</span>
+            </a>
+          </li>
+        ))
+      }
+      <li>
+        <a href={otherHome} hreflang={lang === 'es' ? 'en' : 'es'} lang={lang === 'es' ? 'en' : 'es'}>
+          <span class="breaker" aria-hidden="true">
+            <span class="breaker__handle"></span>
+          </span>
+          <span class="breakers__label">{t.switchLang}</span>
+        </a>
+      </li>
+    </ul>
+    <div class="panel__foot">
+      <a href={`mailto:${site.email}`}>{site.email}</a>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .bar {
+    position: fixed;
+    inset: 0.75rem 0 auto;
+    z-index: 50;
+    pointer-events: none;
+    padding-inline: 0.75rem;
+  }
+
+  .bar__inner {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: min(100%, 72rem);
+    margin-inline: auto;
+    padding: 0.45rem 0.45rem 0.45rem 0.7rem;
+    border-radius: 999px;
+    background: rgb(6 17 31 / 0.55);
+    box-shadow:
+      0 0 0 1px rgb(147 164 184 / 0.16) inset,
+      0 20px 40px -24px rgb(0 0 0 / 0.8);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    transition: background-color 0.4s, box-shadow 0.4s;
+  }
+
+  :global(.bar.is-scrolled) .bar__inner {
+    background: rgb(6 17 31 / 0.9);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    text-decoration: none;
+    flex: none;
+  }
+
+  .brand img {
+    width: 2.6rem;
+    height: auto;
+    filter: drop-shadow(0 0 10px rgb(63 224 255 / 0.35));
+  }
+
+  .brand__word {
+    font-weight: 800;
+    font-stretch: 70%;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    line-height: 0.95;
+    letter-spacing: 0.04em;
+  }
+
+  .nav {
+    position: relative;
+    margin-inline: auto;
+  }
+
+  .nav ul {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .nav a {
+    display: block;
+    padding: 0.55rem 0.9rem;
+    border-radius: 999px;
+    color: var(--steel);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.25s;
+  }
+
+  .nav a:hover,
+  .nav a[aria-current='true'] {
+    color: var(--chrome);
+  }
+
+  /* The current: a short lit segment that travels to the section in view */
+  .nav__current {
+    position: absolute;
+    left: 0;
+    bottom: -0.1rem;
+    height: 2px;
+    width: var(--w, 0px);
+    transform: translateX(var(--x, 0px));
+    border-radius: 2px;
+    background: linear-gradient(90deg, transparent, var(--arc) 30%, #fff 50%, var(--arc) 70%, transparent);
+    box-shadow: 0 0 12px var(--arc);
+    opacity: var(--o, 0);
+    transition:
+      transform 0.6s var(--ease-out),
+      width 0.6s var(--ease-out),
+      opacity 0.3s;
+  }
+
+  .bar__end {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex: none;
+  }
+
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.75rem;
+    padding: 0 0.8rem;
+    border-radius: 999px;
+    color: var(--steel);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.25s;
+  }
+
+  .lang :global(svg) {
+    width: 1.05rem;
+    height: 1.05rem;
+  }
+
+  .lang:hover {
+    color: var(--chrome);
+  }
+
+  .lang__short {
+    display: none;
+  }
+
+  .bar__call {
+    min-height: 2.75rem;
+    padding-inline: 1.1rem;
+    font-size: 0.95rem;
+  }
+
+  /* Dock */
+  .dock {
+    display: none;
+  }
+
+  /* Breaker panel menu */
+  .panel {
+    width: 100%;
+    max-width: 100%;
+    max-height: 100dvh;
+    margin: auto 0 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--chrome);
+  }
+
+  .panel::backdrop {
+    background: rgb(3 9 17 / 0.7);
+    backdrop-filter: blur(6px);
+  }
+
+  .panel[open] .panel__door {
+    animation: door 0.5s var(--ease-out);
+  }
+
+  @keyframes door {
+    from {
+      transform: translateY(40%);
+      opacity: 0;
+    }
+  }
+
+  .panel__door {
+    margin: 0.75rem;
+    padding: 1.25rem 1.25rem calc(1.25rem + env(safe-area-inset-bottom));
+    border-radius: var(--radius-l);
+    background:
+      radial-gradient(circle at 1.1rem 1.1rem, #3a5675 0.22rem, transparent 0.26rem),
+      radial-gradient(circle at calc(100% - 1.1rem) 1.1rem, #3a5675 0.22rem, transparent 0.26rem),
+      linear-gradient(160deg, #183a5c, var(--navy) 60%);
+    box-shadow:
+      0 0 0 1px rgb(147 164 184 / 0.2) inset,
+      0 -20px 60px -20px rgb(63 224 255 / 0.25);
+  }
+
+  .panel__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 0.25rem 0.75rem 1.25rem;
+  }
+
+  .panel__title {
+    font-weight: 700;
+    font-stretch: 70%;
+    font-size: 1.1rem;
+    color: var(--steel);
+  }
+
+  .panel__close {
+    display: grid;
+    place-items: center;
+    width: 2.9rem;
+    height: 2.9rem;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.06);
+    cursor: pointer;
+  }
+
+  .panel__close :global(svg) {
+    width: 1.3rem;
+  }
+
+  .breakers {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .breakers a {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.7rem 0.9rem;
+    border-radius: var(--radius-m);
+    background: rgb(3 9 17 / 0.45);
+    box-shadow: 0 0 0 1px rgb(147 164 184 / 0.12) inset;
+    text-decoration: none;
+  }
+
+  .breakers__label {
+    font-size: 1.9rem;
+    font-weight: 750;
+    font-stretch: 65%;
+    line-height: 1;
+  }
+
+  .breakers a:hover :global(.breaker),
+  .breakers a:focus-visible :global(.breaker),
+  .breakers a[aria-current='true'] :global(.breaker) {
+    --on: 1;
+  }
+
+  .panel__foot {
+    padding: 1rem 1.25rem 0.25rem;
+    font-size: var(--step--1);
+    color: var(--steel);
+  }
+
+  .panel__foot a {
+    text-decoration: none;
+  }
+
+  @media (max-width: 900px) {
+    :global(:root) {
+      --dock-h: calc(4.6rem + env(safe-area-inset-bottom));
+    }
+
+    .nav,
+    .bar__call {
+      display: none;
+    }
+
+    .bar__inner {
+      justify-content: space-between;
+    }
+
+    .lang__long {
+      display: none;
+    }
+
+    .lang__short {
+      display: inline;
+    }
+
+    .dock {
+      position: fixed;
+      inset: auto 0 0;
+      z-index: 50;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 0.4rem;
+      padding: 0.5rem 0.6rem calc(0.5rem + env(safe-area-inset-bottom));
+      background: rgb(6 17 31 / 0.88);
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      box-shadow: 0 -1px 0 rgb(147 164 184 / 0.16);
+    }
+
+    .dock a,
+    .dock button {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.15rem;
+      min-height: 3.6rem;
+      border: 0;
+      border-radius: var(--radius-m);
+      background: transparent;
+      color: var(--steel);
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .dock :global(svg) {
+      width: 1.35rem;
+      height: 1.35rem;
+    }
+
+    .dock .dock__call {
+      flex-direction: row;
+      gap: 0.5rem;
+      background: var(--arc);
+      color: var(--ink);
+      font-size: 1rem;
+      box-shadow: 0 6px 24px -8px rgb(63 224 255 / 0.8);
+    }
+
+    .dock a:active,
+    .dock button:active {
+      transform: scale(0.96);
+    }
+  }
+
+  @media (min-width: 901px) {
+    .panel {
+      display: none;
+    }
+  }
+</style>

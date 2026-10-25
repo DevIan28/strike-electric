@@ -1,0 +1,342 @@
+---
+import Icon from './Icon.astro';
+import Status from './Status.astro';
+import { copy } from '../i18n/copy';
+import { site, type Lang } from '../data/site';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = copy[lang].hero;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<section class="hero" data-hero aria-labelledby="hero-title">
+  <canvas class="hero__arc" data-arc aria-hidden="true"></canvas>
+  <div class="hero__flash" aria-hidden="true"></div>
+
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <Status lang={lang} class="hero__status" />
+      <h1 class="display hero__title" id="hero-title">
+        <span class="chrome">{t.titleA}</span>
+        <span class="chrome">{t.titleB}</span>
+      </h1>
+      <p class="lead hero__lead">{t.lead}</p>
+      <div class="hero__ctas">
+        <a class="btn btn--charge" href={site.phone.href} data-magnet>
+          <Icon name="phone" />
+          {t.call} {site.phone.display}
+        </a>
+        <a class="btn btn--line" href="#estimate">{t.estimate}</a>
+      </div>
+      <p class="hero__hint" aria-hidden="true">
+        <Icon name="bolt" />
+        <span class="hint--fine">{t.hint}</span>
+        <span class="hint--touch">{t.hintTouch}</span>
+      </p>
+    </div>
+
+    <div class="hero__emblem" data-emblem>
+      <img
+        src={`${base}/brand/emblem.webp`}
+        alt="Strike Electric: a fist gripping a lightning bolt"
+        width="460"
+        height="458"
+        fetchpriority="high"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+    padding-block: 7.5rem 4rem;
+    overflow: hidden;
+    background:
+      radial-gradient(60rem 40rem at 78% 40%, rgb(19 48 79 / 0.9), transparent 70%),
+      radial-gradient(40rem 30rem at 10% 110%, rgb(10 166 212 / 0.12), transparent 70%),
+      var(--night);
+  }
+
+  /* Faint conduit grid, fading out toward the copy */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background-image:
+      linear-gradient(rgb(147 164 184 / 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(147 164 184 / 0.06) 1px, transparent 1px);
+    background-size: 4.5rem 4.5rem;
+    mask-image: radial-gradient(ellipse 70% 70% at 70% 45%, #000 20%, transparent 75%);
+  }
+
+  .hero__arc {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .hero__flash {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: radial-gradient(circle at var(--fx, 70%) var(--fy, 30%), rgb(220 250 255 / 0.9), rgb(63 224 255 / 0.25) 35%, transparent 70%);
+    opacity: 0;
+  }
+
+  :global(.hero.is-flash) .hero__flash {
+    animation: flash 0.7s ease-out;
+  }
+
+  @keyframes flash {
+    0% {
+      opacity: 0;
+    }
+    8% {
+      opacity: 1;
+    }
+    18% {
+      opacity: 0.2;
+    }
+    26% {
+      opacity: 0.7;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .hero__grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(1rem, 4vw, 4rem);
+  }
+
+  .hero__copy {
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero__status {
+    margin-bottom: 1.5rem;
+  }
+
+  .hero__title {
+    display: grid;
+    font-size: clamp(3.6rem, 1.4rem + 9.6vw, 9.6rem);
+    text-transform: uppercase;
+    line-height: 0.86;
+    letter-spacing: 0;
+    filter: drop-shadow(0 4px 0 rgb(3 9 17 / 0.65));
+  }
+
+  .hero__title span {
+    display: block;
+    padding-bottom: 0.04em;
+  }
+
+  .hero__lead {
+    margin-top: 1.75rem;
+  }
+
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+  }
+
+  .hero__hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 2.5rem;
+    font-size: var(--step--1);
+    color: rgb(147 164 184 / 0.75);
+  }
+
+  .hero__hint :global(svg) {
+    width: 1rem;
+    color: var(--arc);
+  }
+
+  .hint--touch {
+    display: none;
+  }
+
+  @media (hover: none) {
+    .hint--fine {
+      display: none;
+    }
+
+    .hint--touch {
+      display: inline;
+    }
+  }
+
+  .hero__emblem {
+    --charge: 0;
+    position: relative;
+    justify-self: center;
+    width: min(100%, 30rem);
+  }
+
+  .hero__emblem::before {
+    content: '';
+    position: absolute;
+    inset: 12%;
+    z-index: -1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgb(63 224 255 / 0.35), transparent 65%);
+    opacity: calc(0.45 + var(--charge) * 0.55);
+    transform: scale(calc(1 + var(--charge) * 0.25));
+  }
+
+  .hero__emblem img {
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 0 calc(8px + var(--charge) * 40px) rgb(63 224 255 / calc(0.25 + var(--charge) * 0.6)))
+      brightness(calc(1 + var(--charge) * 0.35));
+    animation: float 7s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /* Page-load sequence: the bolt hits, then the type powers up */
+  :global(.js) .hero__title span,
+  :global(.js) .hero__lead,
+  :global(.js) .hero__ctas,
+  :global(.js) .hero__hint,
+  :global(.js) .hero__status {
+    opacity: 0;
+  }
+
+  :global(.js) .hero__emblem img {
+    opacity: 0;
+  }
+
+  :global(.hero.is-live) .hero__emblem img {
+    opacity: 1;
+    transition: opacity 0.12s;
+  }
+
+  :global(.hero.is-live) .hero__title span {
+    animation: power-up 1s var(--ease-out) both;
+  }
+
+  :global(.hero.is-live) .hero__title span + span {
+    animation-delay: 0.08s;
+  }
+
+  :global(.hero.is-live) .hero__status,
+  :global(.hero.is-live) .hero__lead,
+  :global(.hero.is-live) .hero__ctas,
+  :global(.hero.is-live) .hero__hint {
+    animation: rise 0.8s var(--ease-out) both;
+    animation-delay: 0.3s;
+  }
+
+  :global(.hero.is-live) .hero__ctas {
+    animation-delay: 0.4s;
+  }
+
+  :global(.hero.is-live) .hero__hint {
+    animation-delay: 0.6s;
+  }
+
+  @keyframes power-up {
+    0% {
+      opacity: 0;
+      font-stretch: 50%;
+      letter-spacing: 0.08em;
+      filter: brightness(3) drop-shadow(0 0 18px var(--arc));
+    }
+    20% {
+      opacity: 1;
+    }
+    35% {
+      opacity: 0.4;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+      font-stretch: 62%;
+      letter-spacing: 0;
+      filter: none;
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      min-height: auto;
+      padding-block: 5.5rem 3.5rem;
+      align-items: start;
+    }
+
+    .hero__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero__emblem {
+      order: -1;
+      width: min(62vw, 18rem);
+      margin-bottom: -0.5rem;
+    }
+
+    .hero__ctas .btn {
+      flex: 1 1 14rem;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .hero__ctas .btn {
+      white-space: normal;
+      text-align: center;
+    }
+  }
+
+  @media (min-width: 901px) and (max-height: 720px) {
+    .hero__title {
+      font-size: clamp(3.4rem, 13vh, 7rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__emblem img {
+      animation: none;
+    }
+  }
+</style>

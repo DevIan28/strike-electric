@@ -1,0 +1,343 @@
+---
+import Icon from './Icon.astro';
+import { copy } from '../i18n/copy';
+import { site, type Lang } from '../data/site';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = copy[lang];
+const e = t.estimate;
+const services = [...t.services.residential, ...t.services.commercial].map((s) => s.name);
+---
+
+<section class="section on-paper estimate" id="estimate" aria-labelledby="estimate-title">
+  <div class="wrap estimate__grid">
+    <div class="estimate__intro">
+      <h2 class="display h2" id="estimate-title">{e.title}</h2>
+      <p class="lead">{e.lead}</p>
+
+      <div class="talk">
+        <p>{e.or}</p>
+        <a class="talk__phone" href={site.phone.href}>
+          <Icon name="phone" />
+          {site.phone.display}
+        </a>
+        <a class="talk__mail" href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
+    </div>
+
+    <form
+      class="form"
+      data-estimate
+      data-key={site.formKey ?? ''}
+      data-email={site.email}
+      data-msgs={JSON.stringify({ sending: e.sending, sent: e.sent, mailOpened: e.mailOpened, error: e.error, required: e.required, phone: site.phone.display })}
+      novalidate
+    >
+      <div class="field">
+        <label for="f-name">{e.name}</label>
+        <input id="f-name" name="name" autocomplete="name" required />
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label for="f-phone">{e.phone}</label>
+          <input id="f-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required />
+        </div>
+        <div class="field">
+          <label for="f-email">{e.email}</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" />
+        </div>
+      </div>
+
+      <fieldset class="field">
+        <legend>{e.type}</legend>
+        <div class="chips">
+          <label><input type="radio" name="property" value={e.home} checked /><span>{e.home}</span></label>
+          <label><input type="radio" name="property" value={e.business} /><span>{e.business}</span></label>
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label for="f-service">{e.service}</label>
+        <div class="select">
+          <select id="f-service" name="service">
+            <option value="">{e.servicePlaceholder}</option>
+            {services.map((s) => <option>{s}</option>)}
+            <option>{e.other}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="f-message">{e.message}</label>
+        <textarea id="f-message" name="message" rows="4" placeholder={e.messagePlaceholder} required></textarea>
+      </div>
+
+      <fieldset class="field">
+        <legend>{e.contact}</legend>
+        <div class="chips">
+          <label><input type="radio" name="contact" value={e.byCall} checked /><span>{e.byCall}</span></label>
+          <label><input type="radio" name="contact" value={e.byText} /><span>{e.byText}</span></label>
+          <label><input type="radio" name="contact" value={e.byEmail} /><span>{e.byEmail}</span></label>
+        </div>
+      </fieldset>
+
+      <!-- Spam trap; people never see it -->
+      <input class="trap" type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+      <button class="btn btn--charge form__send" type="submit">
+        <Icon name="bolt" />
+        <span data-send-label>{e.send}</span>
+      </button>
+      <p class="form__note" role="status" aria-live="polite" data-form-note></p>
+    </form>
+  </div>
+</section>
+
+<style>
+  .estimate__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: start;
+  }
+
+  .estimate__intro .lead {
+    margin-top: 1.25rem;
+  }
+
+  .talk {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgb(10 26 46 / 0.12);
+  }
+
+  .talk p {
+    color: var(--ink-soft);
+  }
+
+  .talk__phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.4rem;
+    font-size: var(--step-3);
+    font-weight: 800;
+    font-stretch: 62%;
+    line-height: 1.1;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .talk__phone :global(svg) {
+    width: 0.7em;
+    height: 0.7em;
+    color: var(--arc-deep);
+  }
+
+  .talk__phone:hover {
+    color: var(--arc-deep);
+  }
+
+  .talk__mail {
+    display: block;
+    margin-top: 0.25rem;
+    color: var(--ink-soft);
+    overflow-wrap: anywhere;
+  }
+
+  .form {
+    display: grid;
+    gap: 1.25rem;
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+    border-radius: var(--radius-l);
+    background: #fff;
+    box-shadow:
+      0 0 0 1px rgb(10 26 46 / 0.06),
+      0 30px 60px -30px rgb(10 26 46 / 0.35);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .field {
+    display: grid;
+    gap: 0.45rem;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+
+  label,
+  legend {
+    padding: 0;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  legend {
+    margin-bottom: 0.45rem;
+  }
+
+  input:not([type='radio'], [type='checkbox']),
+  select,
+  textarea {
+    width: 100%;
+    min-height: 3.1rem;
+    padding: 0.75rem 0.95rem;
+    border: 0;
+    border-radius: var(--radius-s);
+    background: var(--paper);
+    box-shadow: 0 0 0 1px rgb(10 26 46 / 0.12) inset;
+    color: var(--ink);
+    font-size: 1rem;
+    transition: box-shadow 0.2s, background-color 0.2s;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 7rem;
+    line-height: 1.5;
+  }
+
+  ::placeholder {
+    color: #7d8ea2;
+  }
+
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    background: #fff;
+    box-shadow:
+      0 0 0 2px var(--arc-deep) inset,
+      0 0 0 4px rgb(63 224 255 / 0.25);
+  }
+
+  [aria-invalid='true'] {
+    box-shadow: 0 0 0 2px #d6455d inset !important;
+  }
+
+  .select {
+    position: relative;
+  }
+
+  .select::after {
+    content: '';
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-right: 2px solid var(--ink-soft);
+    border-bottom: 2px solid var(--ink-soft);
+    transform: translateY(-70%) rotate(45deg);
+    pointer-events: none;
+  }
+
+  select {
+    appearance: none;
+    padding-right: 2.5rem;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chips label {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .chips input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    cursor: pointer;
+  }
+
+  .chips span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0 1.15rem;
+    border-radius: 999px;
+    background: var(--paper);
+    box-shadow: 0 0 0 1px rgb(10 26 46 / 0.12) inset;
+    font-weight: 600;
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+  }
+
+  .chips input:checked + span {
+    background: var(--ink);
+    color: #fff;
+    box-shadow: 0 0 0 2px var(--arc) inset;
+  }
+
+  .chips input:focus-visible + span {
+    outline: 2px solid var(--arc-deep);
+    outline-offset: 2px;
+  }
+
+  .trap {
+    position: absolute;
+    left: -9999px;
+  }
+
+  .form__send {
+    justify-self: start;
+    min-width: 14rem;
+    margin-top: 0.5rem;
+  }
+
+  .form__send[disabled] {
+    opacity: 0.7;
+    cursor: progress;
+  }
+
+  .form__note {
+    min-height: 1.5em;
+    color: var(--ink-soft);
+  }
+
+  .form__note[data-tone='ok'] {
+    color: #0b7a4b;
+    font-weight: 600;
+  }
+
+  .form__note[data-tone='bad'] {
+    color: #b3263d;
+    font-weight: 600;
+  }
+
+  .form__note a {
+    color: inherit;
+  }
+
+  @media (max-width: 900px) {
+    .estimate__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+
+    .form__send {
+      justify-self: stretch;
+    }
+  }
+</style>
