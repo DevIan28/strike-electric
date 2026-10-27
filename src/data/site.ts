@@ -12,17 +12,16 @@ export const site = {
   },
   email: 'support@strikeelectricllc.net',
   timezone: 'America/New_York',
-  // TODO: confirm real hours. 0 = Sunday. Times in 24h, New York time.
+  // 0 = Sunday. Times in 24h, New York time. A missing day means closed.
   hours: {
-    1: [7, 19],
-    2: [7, 19],
-    3: [7, 19],
-    4: [7, 19],
-    5: [7, 19],
-    6: [8, 16],
+    1: [7, 20],
+    2: [7, 20],
+    3: [7, 20],
+    4: [7, 20],
+    5: [7, 20],
+    6: [7, 20],
   } as Record<number, [number, number]>,
-  // TODO: confirm coverage.
-  areas: ['Manhattan', 'Queens', 'Brooklyn', 'The Bronx', 'Staten Island'],
+  areas: ['Queens', 'Brooklyn', 'Manhattan', 'The Bronx', 'Long Island'],
   // Optional. Create a free access key at web3forms.com and set PUBLIC_WEB3FORMS_KEY
   // to receive estimate requests by email; without it the form opens the visitor's mail app.
   formKey: import.meta.env.PUBLIC_WEB3FORMS_KEY as string | undefined,

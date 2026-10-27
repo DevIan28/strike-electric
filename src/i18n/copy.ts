@@ -2,9 +2,9 @@ import type { Lang } from '../data/site';
 
 const en = {
   meta: {
-    title: 'Strike Electric — Electricians in New York City',
+    title: 'Strike Electric — Electricians in New York City and Long Island',
     description:
-      'Residential and commercial electrical services in New York City. Repairs, panel upgrades, lighting, EV chargers and commercial maintenance. Call (646) 363-1492.',
+      'Residential and commercial electrical services in New York City and Long Island, with more than 10 years of experience. Repairs, panel upgrades, lighting, EV chargers and commercial maintenance. Call (646) 363-1492.',
   },
   nav: {
     services: 'Services',
@@ -30,7 +30,7 @@ const en = {
     titleA: 'Power,',
     titleB: 'fixed right.',
     lead:
-      'Residential and commercial electricians serving New York City. We find the problem, explain it in plain words, and fix it to code.',
+      'Residential and commercial electricians serving New York City and Long Island. We find the problem, explain it in plain words, and fix it to code.',
     call: 'Call',
     estimate: 'Request an estimate',
     hint: 'Move your cursor near the bolt',
@@ -74,8 +74,8 @@ const en = {
   about: {
     title: 'Our story',
     body: [
-      'Strike Electric started with a simple idea: electrical work should be done right the first time, by someone who explains what they are doing.',
-      'We work in homes and businesses across New York City. Our commitment is the same on every job: respond quickly, diagnose accurately and finish with care, so your power runs safely and without interruption.',
+      'Strike Electric started with a simple idea: electrical work should be done right the first time, by someone who explains what they are doing. Behind it are more than 10 years of hands-on experience in homes and businesses.',
+      'We work across Queens, Brooklyn, Manhattan, the Bronx and Long Island. Our commitment is the same on every job: respond quickly, diagnose accurately and finish with care, so your power runs safely and without interruption.',
     ],
     areaTitle: 'Where we work',
     areaNote: 'Nearby? Call and ask.',
@@ -126,9 +126,9 @@ type Copy = typeof en;
 
 const es: Copy = {
   meta: {
-    title: 'Strike Electric — Electricistas en la ciudad de Nueva York',
+    title: 'Strike Electric — Electricistas en Nueva York y Long Island',
     description:
-      'Servicios eléctricos residenciales y comerciales en la ciudad de Nueva York. Reparaciones, paneles, iluminación, cargadores para autos eléctricos y mantenimiento comercial. Llama al (646) 363-1492.',
+      'Servicios eléctricos residenciales y comerciales en la ciudad de Nueva York y Long Island, con más de 10 años de experiencia. Reparaciones, paneles, iluminación, cargadores para autos eléctricos y mantenimiento comercial. Llama al (646) 363-1492.',
   },
   nav: {
     services: 'Servicios',
@@ -154,7 +154,7 @@ const es: Copy = {
     titleA: 'Energía,',
     titleB: 'bien resuelta.',
     lead:
-      'Electricistas residenciales y comerciales en la ciudad de Nueva York. Encontramos la falla, te la explicamos claro y la reparamos según el código.',
+      'Electricistas residenciales y comerciales en la ciudad de Nueva York y Long Island. Encontramos la falla, te la explicamos claro y la reparamos según el código.',
     call: 'Llamar',
     estimate: 'Pedir una cotización',
     hint: 'Acerca el cursor al rayo',
@@ -198,8 +198,8 @@ const es: Copy = {
   about: {
     title: 'Nuestra historia',
     body: [
-      'Strike Electric nació de una idea sencilla: el trabajo eléctrico se hace bien desde la primera vez, y por alguien que te explica lo que está haciendo.',
-      'Trabajamos en hogares y negocios de toda la ciudad de Nueva York. Nuestro compromiso es el mismo en cada trabajo: responder rápido, diagnosticar con exactitud y terminar con cuidado, para que tu energía funcione segura y sin interrupciones.',
+      'Strike Electric nació de una idea sencilla: el trabajo eléctrico se hace bien desde la primera vez, y por alguien que te explica lo que está haciendo. Detrás hay más de 10 años de experiencia en hogares y negocios.',
+      'Trabajamos en Queens, Brooklyn, Manhattan, el Bronx y Long Island. Nuestro compromiso es el mismo en cada trabajo: responder rápido, diagnosticar con exactitud y terminar con cuidado, para que tu energía funcione segura y sin interrupciones.',
     ],
     areaTitle: 'Dónde trabajamos',
     areaNote: '¿Estás cerca? Llama y pregunta.',
