@@ -219,14 +219,19 @@ const links = [
   .lang {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.45rem;
     min-height: 2.75rem;
-    padding: 0 0.8rem;
+    padding: 0 1rem;
     border-radius: 999px;
-    color: var(--steel);
+    background: rgb(255 255 255 / 0.08);
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.6) inset;
+    color: #fff;
     text-decoration: none;
-    font-size: 0.9rem;
-    transition: color 0.25s;
+    font-size: 0.92rem;
+    font-weight: 650;
+    transition:
+      background-color 0.25s,
+      color 0.25s;
   }
 
   .lang :global(svg) {
@@ -234,8 +239,10 @@ const links = [
     height: 1.05rem;
   }
 
-  .lang:hover {
-    color: var(--chrome);
+  .lang:hover,
+  .lang:focus-visible {
+    background: #fff;
+    color: var(--ink);
   }
 
   .lang__short {
@@ -376,13 +383,6 @@ const links = [
       justify-content: space-between;
     }
 
-    .lang__long {
-      display: none;
-    }
-
-    .lang__short {
-      display: inline;
-    }
 
     .dock {
       position: fixed;
