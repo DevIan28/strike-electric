@@ -1,6 +1,6 @@
-// Live electric arcs for the hero. The emblem's bolt acts as the electrode:
-// arcs jump from it toward the pointer, a tap anywhere strikes that spot,
-// and the page opens with one bolt hitting the emblem.
+// Live electric arcs around the emblem. Its bolt acts as the electrode:
+// arcs jump toward the pointer, a tap strikes that spot,
+// and intro() drops one bolt from above onto the emblem.
 
 type Pt = { x: number; y: number };
 type Bolt = { paths: { pts: Pt[]; w: number }[]; born: number; life: number; width: number };

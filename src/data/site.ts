@@ -1,6 +1,8 @@
 // Business facts live here so the copy never drifts out of sync with them.
 // Values marked TODO still need confirmation from the owner.
 
+export type WorkCategory = 'pendants' | 'fixtures' | 'recessed' | 'led' | 'outdoor';
+
 export const site = {
   name: 'Strike Electric',
   legalName: 'Strike Electric LLC',
@@ -25,8 +27,68 @@ export const site = {
   // Optional. Create a free access key at web3forms.com and set PUBLIC_WEB3FORMS_KEY
   // to receive estimate requests by email; without it the form opens the visitor's mail app.
   formKey: import.meta.env.PUBLIC_WEB3FORMS_KEY as string | undefined,
-  // Drop real job photos in /public/work and list them here; the gallery shows up on its own.
-  work: [] as { src: string; alt: { en: string; es: string } }[],
+  // Job photos in /public/work (a -sm version sits next to each). Order is display order.
+  work: [
+    { id: '109', cat: 'led', w: 1050, h: 1400, alt: { en: 'Hexagon LED ceiling lighting in a gym', es: 'Iluminación LED hexagonal en el techo de un gimnasio' } },
+    { id: '079', cat: 'pendants', w: 1050, h: 1400, alt: { en: 'Pendant cluster over a dining table with river views', es: 'Lámparas colgantes sobre un comedor con vista al río' } },
+    { id: '088', cat: 'pendants', w: 787, h: 1400, alt: { en: 'Sculptural bird chandelier in a double-height lounge', es: 'Candelabro de aves en un salón de doble altura' } },
+    { id: '049', cat: 'recessed', w: 1400, h: 1050, alt: { en: 'Track lighting in a living room facing the park', es: 'Luces de riel en una sala frente al parque' } },
+    { id: '026', cat: 'led', w: 1050, h: 1400, alt: { en: 'String lights across a brick-walled restaurant ceiling', es: 'Luces colgantes en el techo de un restaurante de ladrillo' } },
+    { id: '071', cat: 'pendants', w: 1400, h: 1050, alt: { en: 'Statement chandelier over a dining table', es: 'Candelabro sobre la mesa del comedor' } },
+    { id: '007', cat: 'pendants', w: 1050, h: 1400, alt: { en: 'Tiered gold chandelier under an exposed ceiling', es: 'Candelabro dorado bajo un techo expuesto' } },
+    { id: '097', cat: 'pendants', w: 1050, h: 1400, alt: { en: 'Cascading globe pendants in a three-story atrium, mid-install', es: 'Lámparas de globos en cascada en un atrio de tres pisos, durante la instalación' } },
+    { id: '020', cat: 'led', w: 1400, h: 1050, alt: { en: 'Cove lighting in a lounge with a painted ceiling', es: 'Iluminación indirecta en un salón con techo pintado' } },
+    { id: '036', cat: 'recessed', w: 1400, h: 1050, alt: { en: 'Track lights and a pendant over a custom wood wall unit', es: 'Luces de riel y lámpara colgante sobre un mueble de madera' } },
+    { id: '016', cat: 'led', w: 1050, h: 1400, alt: { en: 'Backlit stone feature wall', es: 'Pared de piedra retroiluminada' } },
+    { id: '065', cat: 'fixtures', w: 1050, h: 1400, alt: { en: 'Wall sconce against a red curtain', es: 'Aplique de pared junto a una cortina roja' } },
+    { id: '086', cat: 'pendants', w: 1050, h: 1400, alt: { en: 'Modern glass pendants in a double-height space', es: 'Lámparas modernas de vidrio en un espacio de doble altura' } },
+    { id: '051', cat: 'led', w: 787, h: 1400, alt: { en: 'Chandeliers across a hotel ballroom', es: 'Candelabros en el salón de eventos de un hotel' } },
+    { id: '103', cat: 'outdoor', w: 1050, h: 1400, alt: { en: 'Exterior lantern by a front door', es: 'Farol exterior junto a la entrada' } },
+    { id: '058', cat: 'pendants', w: 1050, h: 1400, alt: { en: 'Crystal chandelier in a living room', es: 'Candelabro de cristal en una sala' } },
+    { id: '112', cat: 'led', w: 1050, h: 1400, alt: { en: 'Hexagon LED grid, close-up', es: 'Retícula LED hexagonal, de cerca' } },
+    { id: '073', cat: 'recessed', w: 1400, h: 788, alt: { en: 'Recessed lighting in a living room', es: 'Luces empotradas en una sala' } },
+    { id: '090', cat: 'pendants', w: 1050, h: 1400, alt: { en: 'Kitchen island pendants in a loft', es: 'Lámparas sobre la isla de cocina en un loft' } },
+    { id: '035', cat: 'fixtures', w: 1400, h: 788, alt: { en: 'Star ceiling lights in a green living room', es: 'Lámparas de estrella en el techo de una sala verde' } },
+    { id: '084', cat: 'pendants', w: 1050, h: 1400, alt: { en: 'Bubble chandelier in a vaulted room', es: 'Candelabro de burbujas en un techo abovedado' } },
+    { id: '095', cat: 'led', w: 1050, h: 1400, alt: { en: 'Linear LED channels in a ceiling', es: 'Canales LED lineales en el techo' } },
+    { id: '066', cat: 'led', w: 1050, h: 1400, alt: { en: 'Painted zodiac ceiling with new lighting', es: 'Techo pintado con el zodiaco y nueva iluminación' } },
+    { id: '023', cat: 'pendants', w: 1050, h: 1400, alt: { en: 'Blue glass chandelier in a powder room', es: 'Candelabro de vidrio azul en un baño de visitas' } },
+    { id: '055', cat: 'outdoor', w: 1050, h: 1400, alt: { en: 'Floodlight camera on an exterior wall', es: 'Reflector con cámara en una pared exterior' } },
+    { id: '093', cat: 'led', w: 1050, h: 1400, alt: { en: 'Restaurant dining room lighting', es: 'Iluminación del comedor de un restaurante' } },
+    { id: '064', cat: 'fixtures', w: 1050, h: 1400, alt: { en: 'Glass bubble flush mount', es: 'Plafón de burbujas de vidrio' } },
+    { id: '047', cat: 'pendants', w: 1050, h: 1400, alt: { en: 'Crystal and gold chandelier', es: 'Candelabro de cristal y dorado' } },
+    { id: '032', cat: 'led', w: 1050, h: 1400, alt: { en: 'LED shelving lights', es: 'Luces LED en estantería' } },
+    { id: '015', cat: 'fixtures', w: 1050, h: 1400, alt: { en: 'Flush mount in a curved room over the river', es: 'Plafón en una sala curva frente al río' } },
+    { id: '024', cat: 'pendants', w: 1050, h: 1400, alt: { en: 'Sculptural paper pendant', es: 'Lámpara colgante escultórica' } },
+    { id: '106', cat: 'led', w: 787, h: 1400, alt: { en: 'LED strip lighting in a gym', es: 'Tiras LED en un gimnasio' } },
+    { id: '100', cat: 'pendants', w: 1050, h: 1400, alt: { en: 'Globe pendants from below, atrium install', es: 'Lámparas de globos vistas desde abajo, instalación en un atrio' } },
+    { id: '052', cat: 'recessed', w: 1400, h: 1050, alt: { en: 'Recessed lights and exposed duct', es: 'Luces empotradas y ducto expuesto' } },
+    { id: '029', cat: 'pendants', w: 1050, h: 1400, alt: { en: 'Stacked pendant in a pink room', es: 'Lámpara colgante en una habitación rosada' } },
+    { id: '056', cat: 'fixtures', w: 1050, h: 1400, alt: { en: 'Swirl LED ceiling fixture', es: 'Lámpara de techo LED en espiral' } },
+    { id: '092', cat: 'led', w: 1050, h: 1400, alt: { en: 'Restaurant bar lighting', es: 'Iluminación de la barra de un restaurante' } },
+    { id: '074', cat: 'pendants', w: 787, h: 1400, alt: { en: 'Cone pendant in a patterned room', es: 'Lámpara de cono en una habitación con papel tapiz' } },
+    { id: '039', cat: 'pendants', w: 1050, h: 1400, alt: { en: 'Crystal chandelier, mid-install', es: 'Candelabro de cristal durante la instalación' } },
+    { id: '077', cat: 'fixtures', w: 1400, h: 620, alt: { en: 'Vanity lights over a curved mirror', es: 'Luces sobre un espejo curvo' } },
+    { id: '053', cat: 'recessed', w: 787, h: 1400, alt: { en: 'Track lighting in a bedroom', es: 'Luces de riel en una habitación' } },
+    { id: '108', cat: 'led', w: 1050, h: 1400, alt: { en: 'Hexagon LED grid during assembly', es: 'Retícula LED hexagonal durante el montaje' } },
+    { id: '061', cat: 'fixtures', w: 1050, h: 1400, alt: { en: 'Glass rod wall sconce', es: 'Aplique de pared de varilla de vidrio' } },
+    { id: '001', cat: 'pendants', w: 787, h: 1400, alt: { en: 'Brass sputnik chandelier', es: 'Candelabro sputnik dorado' } },
+    { id: '070', cat: 'outdoor', w: 1050, h: 1400, alt: { en: 'Exterior fixture install on a two-story house', es: 'Instalación de lámpara exterior en una casa de dos pisos' } },
+    { id: '054', cat: 'fixtures', w: 1050, h: 1400, alt: { en: 'Flush mount with a skyline view', es: 'Plafón con vista a los rascacielos' } },
+    { id: '078', cat: 'recessed', w: 1050, h: 1400, alt: { en: 'Recessed lighting in a home office', es: 'Luces empotradas en una oficina en casa' } },
+    { id: '030', cat: 'pendants', w: 1050, h: 1400, alt: { en: 'Paper globe pendant', es: 'Lámpara colgante de globo de papel' } },
+    { id: '009', cat: 'led', w: 1050, h: 1400, alt: { en: 'Linear LED fixtures in an office', es: 'Luminarias LED lineales en una oficina' } },
+    { id: '004', cat: 'fixtures', w: 1050, h: 1400, alt: { en: 'Ceramic wall sconce', es: 'Aplique de pared de cerámica' } },
+    { id: '040', cat: 'pendants', w: 1050, h: 1400, alt: { en: 'Globe pendant by a garden window', es: 'Lámpara de globo junto a una ventana' } },
+    { id: '076', cat: 'recessed', w: 1400, h: 1050, alt: { en: 'Recessed and track lighting in a classic living room', es: 'Luces empotradas y de riel en una sala clásica' } },
+    { id: '060', cat: 'outdoor', w: 1050, h: 1400, alt: { en: 'Installing a floodlight on a brick facade', es: 'Instalando un reflector en una fachada de ladrillo' } },
+    { id: '069', cat: 'fixtures', w: 1050, h: 1400, alt: { en: 'Modern white ceiling fixture', es: 'Lámpara de techo blanca moderna' } },
+    { id: '085', cat: 'led', w: 787, h: 1400, alt: { en: 'Linear LED install in a new space', es: 'Instalación de LED lineal en un espacio nuevo' } },
+    { id: '010', cat: 'pendants', w: 1050, h: 1400, alt: { en: 'Bubble chandelier in a music room', es: 'Candelabro de burbujas en una sala con piano' } },
+    { id: '005', cat: 'fixtures', w: 1050, h: 1400, alt: { en: 'Corridor lighting in a renovated hallway', es: 'Iluminación de un pasillo renovado' } },
+    { id: '013', cat: 'fixtures', w: 787, h: 1400, alt: { en: 'Wall sconce in a stairwell', es: 'Aplique de pared en una escalera' } },
+    { id: '028', cat: 'fixtures', w: 1050, h: 1400, alt: { en: 'Cloud-shaped LED ceiling light', es: 'Lámpara LED en forma de nube' } },
+  ] as { id: string; cat: WorkCategory; w: number; h: number; alt: { en: string; es: string } }[],
 } as const;
 
 export type Lang = 'en' | 'es';

@@ -6,21 +6,116 @@ const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matc
 const $ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel);
 const $$ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => [...root.querySelectorAll<T>(sel)];
 
-/* Hero */
+/* Hero: wait for the photo, then the lights flicker on */
 const hero = $('[data-hero]');
-const canvas = $<HTMLCanvasElement>('[data-arc]');
-const emblem = $('[data-emblem]');
 if (hero) {
+  const img = $<HTMLImageElement>('[data-hero-img]', hero);
   const live = () => hero.classList.add('is-live');
-  if (!reduced && canvas && emblem) {
-    const arcs = initLightning(hero, canvas, emblem);
-    const img = emblem.querySelector('img');
-    const go = () => setTimeout(() => arcs.intro(live), 150);
-    if (img && !img.complete) img.addEventListener('load', go, { once: true });
-    else go();
+  if (img && !img.complete) {
+    img.addEventListener('load', live, { once: true });
+    img.addEventListener('error', live, { once: true });
   } else {
     live();
   }
+}
+
+/* Why section: the emblem's bolt is the electrode; one strike when it first comes into view */
+const why = $('[data-why]');
+const canvas = why ? $<HTMLCanvasElement>('[data-arc]', why) : null;
+const emblem = why ? $('[data-emblem]', why) : null;
+if (why && canvas && emblem && !reduced) {
+  const arcs = initLightning(why, canvas, emblem);
+  const once = new IntersectionObserver(
+    ([entry]) => {
+      if (!entry.isIntersecting) return;
+      once.disconnect();
+      setTimeout(() => arcs.intro(() => why.classList.add('is-live')), 250);
+    },
+    { threshold: 0.45 },
+  );
+  once.observe(why);
+}
+
+/* Work gallery: filters and full-screen viewer */
+const work = $('[data-work]');
+if (work) {
+  const data = JSON.parse($('[data-work-data]', work)!.textContent ?? '{}') as {
+    of: string;
+    items: { src: string; alt: string; cat: string }[];
+  };
+  const tiles = $$<HTMLLIElement>('.grid li', work);
+  const filterButtons = $$<HTMLButtonElement>('[data-filter]', work);
+  let filter = 'all';
+
+  const more = $<HTMLButtonElement>('[data-more]', work);
+  let expanded = false;
+  const apply = () => {
+    tiles.forEach((li) => {
+      const inFilter = filter === 'all' || li.dataset.cat === filter;
+      li.hidden = !inFilter || (filter === 'all' && !expanded && li.hasAttribute('data-extra'));
+    });
+    if (more) more.parentElement!.hidden = filter !== 'all' || expanded;
+  };
+  more?.addEventListener('click', () => {
+    expanded = true;
+    apply();
+  });
+  for (const btn of filterButtons) {
+    btn.addEventListener('click', () => {
+      filter = btn.dataset.filter!;
+      filterButtons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      apply();
+    });
+  }
+
+  const viewer = $<HTMLDialogElement>('[data-viewer]', work)!;
+  const vImg = $<HTMLImageElement>('[data-viewer-img]', viewer)!;
+  const vCap = $('[data-viewer-cap]', viewer)!;
+  const vCount = $('[data-viewer-count]', viewer)!;
+  let list: number[] = [];
+  let pos = 0;
+
+  const show = () => {
+    const item = data.items[list[pos]];
+    vImg.src = item.src;
+    vImg.alt = item.alt;
+    vCap.textContent = item.alt;
+    vCount.textContent = `${pos + 1} ${data.of} ${list.length}`;
+    vImg.style.animation = 'none';
+    void vImg.offsetWidth;
+    vImg.style.animation = '';
+  };
+  const step = (d: number) => {
+    pos = (pos + d + list.length) % list.length;
+    show();
+  };
+
+  for (const tile of $$<HTMLButtonElement>('.tile', work)) {
+    tile.addEventListener('click', () => {
+      list = tiles.flatMap((li, i) => (li.hidden ? [] : [i]));
+      pos = list.indexOf(Number(tile.dataset.index));
+      show();
+      viewer.showModal();
+    });
+  }
+  $('[data-viewer-close]', viewer)!.addEventListener('click', () => viewer.close());
+  $('[data-viewer-prev]', viewer)!.addEventListener('click', () => step(-1));
+  $('[data-viewer-next]', viewer)!.addEventListener('click', () => step(1));
+  viewer.addEventListener('click', (e) => {
+    if (e.target === viewer || (e.target as Element).matches('figure')) viewer.close();
+  });
+  viewer.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') step(1);
+    if (e.key === 'ArrowLeft') step(-1);
+  });
+
+  // Swipe between photos on touch screens
+  let startX = 0;
+  viewer.addEventListener('touchstart', (e) => (startX = e.touches[0].clientX), { passive: true });
+  viewer.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
+  });
 }
 
 /* Open / closed, in New York time */
