@@ -15,7 +15,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 
 <section class="hero" data-hero aria-labelledby="hero-title">
   <picture class="hero__media">
-    <source media="(max-width: 700px), (orientation: portrait) and (max-width: 1100px)" srcset={`${base}/hero/panel-m.webp`} />
+    <source
+      media="(max-width: 700px), (orientation: portrait) and (max-width: 1100px)"
+      srcset={`${base}/hero/panel-v-600.webp 600w, ${base}/hero/panel-v-940.webp 940w`}
+      sizes="100vw"
+      width="940"
+      height="1672"
+    />
     <img
       src={`${base}/hero/panel-1672.webp`}
       srcset={`${base}/hero/panel-1100.webp 1100w, ${base}/hero/panel-1672.webp 1672w`}
@@ -241,16 +247,17 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   @media (max-width: 700px), (orientation: portrait) and (max-width: 1100px) {
     .hero {
       align-items: end;
-      padding-block: 46svh 2.5rem;
+      padding-block: 52svh 2.5rem;
     }
 
+    /* The portrait photo keeps the electrician up top and fades to dark below */
     .hero__media img {
-      object-position: 50% 20%;
+      object-position: 50% 0;
     }
 
     .hero__shade {
       background:
-        linear-gradient(180deg, rgb(6 17 31 / 0.55) 0%, transparent 16%, transparent 32%, rgb(6 17 31 / 0.85) 52%, var(--night) 66%);
+        linear-gradient(180deg, rgb(6 17 31 / 0.5) 0%, transparent 14%, transparent 40%, rgb(6 17 31 / 0.75) 56%, var(--night) 72%);
     }
 
     .hero__ctas .btn {
