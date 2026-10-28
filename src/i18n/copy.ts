@@ -4,7 +4,7 @@ const en = {
   meta: {
     title: 'Strike Electric — Electricians in New York City and Long Island',
     description:
-      'Residential and commercial electrical services in New York City and Long Island, with more than 10 years of experience. Repairs, panel upgrades, lighting, EV chargers and commercial maintenance. Call (646) 363-1492.',
+      'Residential and commercial electrical services in New York City and Long Island, with more than 10 years of experience. Service upgrades, panels, repairs, lighting, EV chargers and commercial maintenance. Call (646) 363-1492.',
   },
   nav: {
     services: 'Services',
@@ -42,8 +42,9 @@ const en = {
     lead: 'From a single dead outlet to a full commercial fit-out.',
     tabs: { residential: 'Homes', commercial: 'Businesses' },
     residential: [
+      { name: 'Service upgrades', text: 'More power from the street: 100 to 200 amps, a new meter and panel, so AC, appliances and an EV charger can all run at once, safely.' },
       { name: 'Troubleshooting and repairs', text: 'Breakers that trip, outlets that stopped working, lights that flicker. We trace the cause and fix it.' },
-      { name: 'Panel upgrades', text: 'Swap old fuse boxes and undersized panels for one that handles what your home runs today.' },
+      { name: 'Panel replacement', text: 'Swap old fuse boxes and worn-out or crowded panels for a new one, every circuit labeled.' },
       { name: 'Lighting', text: 'Recessed, under-cabinet and outdoor LED lighting, laid out and installed.' },
       { name: 'Renovation wiring', text: 'Complete wiring for remodels, additions and new construction, built to code.' },
       { name: 'Outlets, switches and GFCI', text: 'New circuits, smart and USB switches, GFCI protection for kitchens and baths.' },
@@ -52,7 +53,7 @@ const en = {
     commercial: [
       { name: 'Preventive maintenance', text: 'Scheduled inspections and repairs that keep your business from going dark.' },
       { name: 'Commercial and emergency lighting', text: 'Storefront, office and warehouse lighting, plus exit and emergency fixtures.' },
-      { name: 'Power and three-phase', text: 'Feeders, sub-panels and three-phase service for equipment that needs it.' },
+      { name: 'Service upgrades and three-phase', text: 'More amperage for growing businesses: new service, feeders, sub-panels and three-phase power for heavy equipment.' },
       { name: 'Structured cabling', text: 'Data, security cameras and low-voltage systems, cleanly run and labeled.' },
       { name: 'Overloads and load balancing', text: 'Circuits that keep tripping get measured, balanced and redistributed.' },
       { name: 'Build-outs', text: 'Electrical for new tenants and renovated spaces, from layout to final test.' },
@@ -152,7 +153,7 @@ const es: Copy = {
   meta: {
     title: 'Strike Electric — Electricistas en Nueva York y Long Island',
     description:
-      'Servicios eléctricos residenciales y comerciales en la ciudad de Nueva York y Long Island, con más de 10 años de experiencia. Reparaciones, paneles, iluminación, cargadores para autos eléctricos y mantenimiento comercial. Llama al (646) 363-1492.',
+      'Servicios eléctricos residenciales y comerciales en la ciudad de Nueva York y Long Island, con más de 10 años de experiencia. Aumento de servicio, paneles, reparaciones, iluminación, cargadores para autos eléctricos y mantenimiento comercial. Llama al (646) 363-1492.',
   },
   nav: {
     services: 'Servicios',
@@ -190,8 +191,9 @@ const es: Copy = {
     lead: 'Desde un tomacorriente que no funciona hasta la instalación completa de un local.',
     tabs: { residential: 'Hogares', commercial: 'Negocios' },
     residential: [
+      { name: 'Aumento de servicio (service upgrade)', text: 'Más energía desde la calle: de 100 a 200 amperios, medidor y panel nuevos, para que el aire, los electrodomésticos y el cargador del carro funcionen a la vez y con seguridad.' },
       { name: 'Diagnóstico y reparaciones', text: 'Breakers que se disparan, tomas que dejaron de funcionar, luces que parpadean. Encontramos la causa y la reparamos.' },
-      { name: 'Cambio de panel', text: 'Reemplazamos cajas de fusibles viejas y paneles pequeños por uno que soporte lo que tu casa usa hoy.' },
+      { name: 'Cambio de panel', text: 'Reemplazamos cajas de fusibles viejas y paneles gastados o saturados por uno nuevo, con cada circuito marcado.' },
       { name: 'Iluminación', text: 'Iluminación LED empotrada, bajo gabinetes y exterior, diseñada e instalada.' },
       { name: 'Cableado para remodelaciones', text: 'Cableado completo para remodelaciones, ampliaciones y construcciones nuevas, según el código.' },
       { name: 'Tomas, interruptores y GFCI', text: 'Circuitos nuevos, interruptores inteligentes y USB, protección GFCI en cocinas y baños.' },
@@ -200,7 +202,7 @@ const es: Copy = {
     commercial: [
       { name: 'Mantenimiento preventivo', text: 'Inspecciones y reparaciones programadas para que tu negocio no se quede sin luz.' },
       { name: 'Iluminación comercial y de emergencia', text: 'Iluminación para locales, oficinas y bodegas, más señales de salida y luces de emergencia.' },
-      { name: 'Potencia y sistemas trifásicos', text: 'Alimentadores, subpaneles y servicio trifásico para los equipos que lo necesitan.' },
+      { name: 'Aumento de servicio y trifásico', text: 'Más amperaje para negocios que crecen: acometida nueva, alimentadores, subpaneles y potencia trifásica para equipos pesados.' },
       { name: 'Cableado estructurado', text: 'Datos, cámaras de seguridad y sistemas de bajo voltaje, ordenados y marcados.' },
       { name: 'Sobrecargas y balanceo de líneas', text: 'Medimos, balanceamos y redistribuimos los circuitos que se disparan una y otra vez.' },
       { name: 'Adecuación de locales', text: 'La parte eléctrica de locales nuevos o remodelados, del diseño a la prueba final.' },
